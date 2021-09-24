@@ -90,5 +90,9 @@ public class ParseSelectorUtil {
 		}
 		return webElements;
 	}
+	
+	public static List<WebElement> findElementsByXpath(SearchContext searchContext, String xpath) {
+		return searchContext.findElements(By.xpath(xpath));
+	}
 
 }

@@ -1,11 +1,7 @@
 package com.wsbc.process;
 
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import com.wsbc.process.constant.ProcessConstant;
 import com.wsbc.selenium.operation.Operation;
@@ -15,14 +11,12 @@ import com.wsbc.util.StringUtil;
 
 public class OperationNode extends Node {
 	
-	private static final Log logger = LogFactory.getLog(OperationNode.class);
-	
 	private Operation operation;
 	
 	private Result result;
 	
 	public String getType() {
-		return this.getAttribute(ProcessConstant.TYPE);
+		return this.getAttribute(ProcessConstant.Attribute.TYPE);
 	}
 
 	@Override
@@ -44,7 +38,7 @@ public class OperationNode extends Node {
 		if (out.size() > 0) {
 			for (Entry<String, String> entry : out.entrySet()) {
 				Object value = result.getData().get(entry.getKey());
-				this.putResponse(entry.getValue(), StringUtil.objectToString(value));
+				this.putResponse(entry.getValue(), value);
 			}
 		}
 	}

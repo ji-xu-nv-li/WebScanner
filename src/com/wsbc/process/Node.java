@@ -11,9 +11,9 @@ public abstract class Node {
 	
 	private Map<String, String> attributes = new HashMap<String, String>();
 	
-	private Map<String, String> request = new HashMap<String, String>();
+	private Map<String, Object> request = new HashMap<String, Object>();
 	
-	private Map<String, String> response = new HashMap<String, String>();
+	private Map<String, Object> response = new HashMap<String, Object>();
 	
 	/**
 	 * key: get方式获取数据的方法
@@ -22,9 +22,9 @@ public abstract class Node {
 	private Map<String, String> out = new HashMap<String, String>();
 	
 	/**
-	 * 当前节点所在的节点列表
+	 * 当前节点所在的父节点
 	 */
-	private ListNode nodes = null;
+	private ListNode parent = null;
 	
 	public void putAttribute(String key, String value) {
 		attributes.put(key, value);
@@ -34,27 +34,27 @@ public abstract class Node {
 		return attributes.get(key);
 	}
 	
-	public void putRequest(String key, String value) {
+	public void putRequest(String key, Object value) {
 		request.put(key, value);
 	}
 	
-	public String getRequest(String key) {
+	public Object getRequest(String key) {
 		return request.get(key);
 	}
 	
-	public Map<String, String> getRequest() {
+	public Map<String, Object> getRequest() {
 		return request;
 	}
 	
-	public void putResponse(String key, String value) {
+	public void putResponse(String key, Object value) {
 		response.put(key, value);
 	}
 	
-	public String getResponse(String key) {
+	public Object getResponse(String key) {
 		return response.get(key);
 	}
 	
-	public Map<String, String> getResponse() {
+	public Map<String, Object> getResponse() {
 		return response;
 	}
 	
@@ -70,14 +70,14 @@ public abstract class Node {
 		return out;
 	}
 	
-	public ListNode getNodes() {
-		return nodes;
+	public ListNode getParent() {
+		return parent;
 	}
 
-	public void setNodes(ListNode nodes) {
-		this.nodes = nodes;
+	public void setParent(ListNode parent) {
+		this.parent = parent;
 	}
-	
+
 	public void handler() {
 		preHanlder();
 		doHanlder();
@@ -95,10 +95,10 @@ public abstract class Node {
 	}
 	
 	private void handlerRequest() {
-		Map<String, String> request = this.getRequest();
-		Map<String, String> back = new HashMap<String, String>();
-		for (Entry<String, String> entry : request.entrySet()) {
-			String value = entry.getValue();
+		Map<String, Object> request = this.getRequest();
+		Map<String, Object> back = new HashMap<String, Object>();
+		for (Entry<String, Object> entry : request.entrySet()) {
+			String value = entry.getValue().toString();
 			// ${value} 为需要替换的数据，故重新获取值
 			if (value != null && value.matches("^\\$\\{.*\\}$")) {
 				value = value.replaceAll("[$|{|}]", "").trim();

@@ -28,13 +28,14 @@
      	desc-描述信息：无实际用途
      	type-查找方式
      	condition-查找条件
-		multiple-是否匹配多个元素
+		multiple-是否匹配多个元素，默认匹配第一个符合的元素
 		alias-查找结果默认使用 _search_ 命名结果，可通过alias重命名
 		attribute-获取元素属性值，默认取文本数据
 		mergeData-用于整合循环内数据，外部通过此值获取数据
 	 -->
-	<search name="保存自选基金信息" type="xpath" condition="//tbody[@data-listidx='0']" multiple="false" alias="">
-		<search type="tagName" condition="tr" multiple="true" alias="tr">
+	<search name="保存自选基金信息" type="xpath" condition="//tbody[@data-listidx='0']" multiple="false">
+		<search name="获取tr标签" type="tagName" condition="tr" multiple="true" alias="tr">
+			<!-- 匹配出多个元素，使用forEach循环操作 -->
 			<forEach items="${tr}" var="tr" mergeData="fund">
 				<getData desc="日期" name="date" type="xpath" condition="td[5]/p[2]"></getData>
 				<getData desc="基金代码" name="fundCode" type="xpath" condition="td[1]//a[@class='code']"></getData>

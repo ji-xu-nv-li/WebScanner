@@ -30,14 +30,20 @@ public class Process {
 		String nodeType = element.getName();
 		Node node = null;
 		switch (nodeType) {
-			case ProcessConstant.PROCESS:
+			case ProcessConstant.Node.PROCESS:
 				node = new ProcessNode();
 				break;
-			case ProcessConstant.OPERATION:
+			case ProcessConstant.Node.OPERATION:
 				node = new OperationNode();
 				break;
-			case ProcessConstant.FOR_EACH:
+			case ProcessConstant.Node.FOR_EACH:
 				node = new ForEachListNode();
+				break;
+			case ProcessConstant.Node.SEARCH:
+				node = new SearchNode();
+				break;
+			case ProcessConstant.Node.GET_DATA:
+				node = new GetDataNode();
 				break;
 			default:
 				throw new RuntimeException("未知标签[" + nodeType + "]类型或标签配置错误");
@@ -52,13 +58,13 @@ public class Process {
 		for (Element e : elements) {
 			String nodeTypeTemp = e.getName();
 			switch (nodeTypeTemp) {
-				case ProcessConstant.DATA:
+				case ProcessConstant.Node.DATA:
 					attributes = element.attributes();
 					for (Attribute attr : attributes) {
 						node.putRequest(attr.getName(), attr.getValue());
 					}
 					break;
-				case ProcessConstant.OUT:
+				case ProcessConstant.Node.OUT:
 					attributes = element.attributes();
 					for (Attribute attr : attributes) {
 						node.putOut(attr.getName(), attr.getValue());

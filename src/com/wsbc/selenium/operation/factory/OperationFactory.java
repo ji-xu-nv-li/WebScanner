@@ -57,13 +57,13 @@ public class OperationFactory {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static Operation getOperation(String operationType, Map<String, String> params){
+	public static Operation getOperation(String operationType, Map<String, Object> params){
 		Operation operation = null;
 		try {
 			Class<? extends Operation> clazz = null;
 			if (Dictionary.OperName.CUSTOMER_OPERATION.equals(operationType)) {
 				// 获取数据的对象，操作多变，有参数传递类型操作
-				String clazzName = params.get("class");
+				String clazzName = (String)params.get("class");
 				clazz = (Class<? extends Operation>) OperationFactory.class
 							.getClassLoader().loadClass(clazzName);
 			} else {
@@ -74,18 +74,20 @@ public class OperationFactory {
 			for (Field field : declaredFields) {
 				field.setAccessible(true);
 				String fieldName = field.getName();
-				String value = params.get(fieldName);
-				// ${value} 为需要替换的数据，故重新获取值
-				if (value != null && value.matches("^\\$\\{.*\\}$")) {
-					value = value.replaceAll("[$|{|}]", "").trim();
-					value = params.get(value);
-				}
-				String setMethodName = "set" + fieldName.substring(0, 1).toUpperCase()
-						+ fieldName.substring(1);
-				Method method = clazz.getDeclaredMethod(setMethodName, String.class);
-				if (method != null) {
-					method.setAccessible(true);
-					method.invoke(operation, value);
+				Object value = params.get(fieldName);
+				if (value != null) {
+					// ${value} 为需要替换的数据，故重新获取值
+					if (value.toString().matches("^\\$\\{.*\\}$")) {
+						value = value.toString().replaceAll("[$|{|}]", "").trim();
+						value = params.get(value);
+					}
+					String setMethodName = "set" + fieldName.substring(0, 1).toUpperCase()
+							+ fieldName.substring(1);
+					Method method = clazz.getDeclaredMethod(setMethodName, String.class);
+					if (method != null) {
+						method.setAccessible(true);
+						method.invoke(operation, value);
+					}
 				}
 			}
 		} catch (Exception e) {

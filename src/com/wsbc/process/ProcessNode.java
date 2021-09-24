@@ -7,7 +7,7 @@ public class ProcessNode extends ListNode {
 
 	@Override
 	public void doHanlder() {
-		String startName = this.getAttribute(ProcessConstant.START);
+		String startName = this.getAttribute(ProcessConstant.Attribute.START);
 		String nextName = startName;
 		while (nextName != null && !"".equals(nextName)) {
 			Node node = this.getNode(nextName);
@@ -15,7 +15,7 @@ public class ProcessNode extends ListNode {
 				throw new RuntimeException("无法找到节点名称：" + nextName);
 			}
 			node.handler();
-			nextName = node.getAttribute(ProcessConstant.NEXT);
+			nextName = node.getAttribute(ProcessConstant.Attribute.NEXT);
 		}
 	}
 	

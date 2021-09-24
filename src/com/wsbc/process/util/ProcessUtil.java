@@ -12,8 +12,9 @@ public class ProcessUtil {
 	 * 创建时间： 2020年2月7日  下午6:03:57
 	 * @param node
 	 * @param location . 隔开表示多层级
+	 * 待验证
 	 */
-	public static String getResponseValue(Node node, String location) {
+	public static Object getResponseValue(Node node, String location) {
 		// 无法获取比自己多层次的数据
 		String[] strs = location.split("\\.");
 		ListNode listNode = null;
@@ -23,7 +24,7 @@ public class ProcessUtil {
 				if (node == null) {
 					throw new RuntimeException("查找变量[" + location + "]发生错误");
 				}
-				node = node.getNodes();
+				node = node.getParent();
 			}
 			listNode = (ListNode) node;
 			// 获取对应节点

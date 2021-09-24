@@ -7,7 +7,7 @@ public class ForEachListNode extends ListNode {
 
 	@Override
 	public void doHanlder() {
-		String startName = this.getAttribute(ProcessConstant.START);
+		String startName = this.getAttribute(ProcessConstant.Attribute.START);
 		String nextName = startName;
 		String[] values = this.getAttribute(ProcessConstant.ForEach.ITEMS).split(",");
 		String var = this.getAttribute(ProcessConstant.ForEach.VAR);
@@ -18,7 +18,7 @@ public class ForEachListNode extends ListNode {
 				node.putRequest(ProcessConstant.ForEach.INDEX, index + "");
 				node.putRequest(ProcessConstant.ForEach.COUNT, count + "");
 				node.handler();
-				nextName = node.getAttribute(ProcessConstant.NEXT);
+				nextName = node.getAttribute(ProcessConstant.Attribute.NEXT);
 			}
 			// 重置，进入下一循环
 			nextName = startName;
