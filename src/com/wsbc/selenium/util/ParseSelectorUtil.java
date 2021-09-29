@@ -7,6 +7,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
+import com.wsbc.selenium.dic.ByType;
+
 public class ParseSelectorUtil {
 	
 	public static WebElement findElement(String selecotr) {
@@ -91,8 +93,31 @@ public class ParseSelectorUtil {
 		return webElements;
 	}
 	
-	public static List<WebElement> findElementsByXpath(SearchContext searchContext, String xpath) {
-		return searchContext.findElements(By.xpath(xpath));
+	public static List<WebElement> findElements(SearchContext searchContext, ByType by, String condition) {
+		List<WebElement> webElements = new ArrayList<WebElement>();
+		switch (by) {
+			case xpath:
+				webElements = searchContext.findElements(By.xpath(condition));
+				break;
+			case tagName:
+				webElements = searchContext.findElements(By.tagName(condition));
+				break;
+			case name:
+				webElements = searchContext.findElements(By.name(condition));
+				break;
+			case id:
+				webElements = searchContext.findElements(By.id(condition));
+				break;
+			case cssSelector:
+				webElements = searchContext.findElements(By.cssSelector(condition));
+				break;
+			case className:
+				webElements = searchContext.findElements(By.className(condition));
+				break;
+			default:
+				break;
+		}
+		return webElements;
 	}
 
 }

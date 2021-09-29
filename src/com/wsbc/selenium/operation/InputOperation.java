@@ -1,5 +1,7 @@
 package com.wsbc.selenium.operation;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
@@ -7,6 +9,8 @@ import com.wsbc.selenium.result.Result;
 import com.wsbc.selenium.util.ParseSelectorUtil;
 
 public class InputOperation extends Operation {
+	
+	private static final Log logger = LogFactory.getLog(InputOperation.class);
 	
 	private String value;
 	

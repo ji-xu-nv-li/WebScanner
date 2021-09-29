@@ -1,9 +1,14 @@
 package com.wsbc.selenium.operation;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.wsbc.selenium.result.SeletorResult;
 import com.wsbc.selenium.util.ParseSelectorUtil;
 
 public class SeletorOperation extends Operation{
+	
+	private static final Log logger = LogFactory.getLog(SeletorOperation.class);
 	
 	private String location;
 	

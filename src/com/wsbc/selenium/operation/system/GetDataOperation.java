@@ -1,5 +1,8 @@
 package com.wsbc.selenium.operation.system;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.wsbc.selenium.operation.Operation;
 import com.wsbc.selenium.result.Result;
 
@@ -7,6 +10,8 @@ import com.wsbc.selenium.result.Result;
  * 获取页面数据，因比较个性化，仅提供方式，具体需自选实现
  */
 public abstract class GetDataOperation<T> extends Operation{
+	
+	private static final Log logger = LogFactory.getLog(GetDataOperation.class);
 	
 	@Override
 	final public Result handler() {

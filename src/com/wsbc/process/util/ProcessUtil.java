@@ -18,25 +18,26 @@ public class ProcessUtil {
 		// 无法获取比自己多层次的数据
 		String[] strs = location.split("\\.");
 		ListNode listNode = null;
-		if (strs.length > 1) {
-			// 获取节点列表
-			for (int index = 0 ; index < strs.length - 1 ; index++) {
-				if (node == null) {
-					throw new RuntimeException("查找变量[" + location + "]发生错误");
+		try {
+			if (strs.length > 1) {
+				// 获取节点列表
+				for (int index = 0 ; index < strs.length - 1 ; index++) {
+					node = node.getParent();
 				}
-				node = node.getParent();
+				listNode = (ListNode) node;
+				// 获取对应节点
+				for (int index = 0 ; index < strs.length - 2 ; index++) {
+					listNode = (ListNode) listNode.getNode(strs[index]);
+				}
+				node = listNode.getNode(strs[strs.length - 2]);
+				// 获取节点数据
+				return node.getResponse(strs[strs.length - 1]);
+			} else {
+				// 否则是当前节点request里的数据
+				return node.getRequest().get(strs[0]);
 			}
-			listNode = (ListNode) node;
-			// 获取对应节点
-			for (int index = 0 ; index < strs.length - 2 ; index++) {
-				listNode = (ListNode) listNode.getNode(strs[index]);
-			}
-			node = listNode.getNode(strs[strs.length - 2]);
-			// 获取节点数据
-			return node.getResponse(strs[strs.length - 1]);
-		} else {
-			// 否则是当前节点request里的数据
-			return node.getRequest().get(strs[0]);
+		} catch (Throwable e) {
+			throw new RuntimeException("查找变量[" + location + "]发生错误", e);
 		}
 	}
 }

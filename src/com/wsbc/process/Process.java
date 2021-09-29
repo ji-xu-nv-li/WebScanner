@@ -45,6 +45,9 @@ public class Process {
 			case ProcessConstant.Node.GET_DATA:
 				node = new GetDataNode();
 				break;
+			case ProcessConstant.Node.SYSTEM_OUT:
+				node = new SystemOutNode();
+				break;
 			default:
 				throw new RuntimeException("未知标签[" + nodeType + "]类型或标签配置错误");
 		}
@@ -59,13 +62,13 @@ public class Process {
 			String nodeTypeTemp = e.getName();
 			switch (nodeTypeTemp) {
 				case ProcessConstant.Node.DATA:
-					attributes = element.attributes();
+					attributes = e.attributes();
 					for (Attribute attr : attributes) {
 						node.putRequest(attr.getName(), attr.getValue());
 					}
 					break;
 				case ProcessConstant.Node.OUT:
-					attributes = element.attributes();
+					attributes = e.attributes();
 					for (Attribute attr : attributes) {
 						node.putOut(attr.getName(), attr.getValue());
 					}

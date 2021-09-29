@@ -39,7 +39,15 @@ public abstract class Node {
 	}
 	
 	public Object getRequest(String key) {
-		return request.get(key);
+		if (key.matches("^\\$\\{.*\\}$")) {
+			key = key.replaceAll("[$|{|}]", "").trim();
+		}
+		Object value = request.get(key);
+		if (value.toString().matches("^\\$\\{.*\\}$")) {
+			value = value.toString().replaceAll("[$|{|}]", "").trim();
+			value = request.get(value);
+		}
+		return value;
 	}
 	
 	public Map<String, Object> getRequest() {

@@ -20,6 +20,7 @@ import com.wsbc.selenium.operation.SwitchToOperation;
 import com.wsbc.selenium.operation.WaitOperation;
 import com.wsbc.selenium.operation.system.KillOperation;
 import com.wsbc.selenium.operation.system.ListOperation;
+import com.wsbc.util.StringUtil;
 
 public class OperationFactory {
 	
@@ -73,6 +74,7 @@ public class OperationFactory {
 			Field[] declaredFields = clazz.getDeclaredFields();
 			for (Field field : declaredFields) {
 				field.setAccessible(true);
+				
 				String fieldName = field.getName();
 				Object value = params.get(fieldName);
 				if (value != null) {
@@ -86,7 +88,8 @@ public class OperationFactory {
 					Method method = clazz.getDeclaredMethod(setMethodName, String.class);
 					if (method != null) {
 						method.setAccessible(true);
-						method.invoke(operation, value);
+						Class<?> clazzField = field.getType();
+						method.invoke(operation, StringUtil.objectToString(value));
 					}
 				}
 			}
@@ -96,6 +99,7 @@ public class OperationFactory {
 		}
 		return operation;
 	}
+	
 	
 //	public static Operation getOperation(OperationBean ob) {
 //		return getOperation(ob.getOperation(), ob.getLocation(), ob.getValue1(),

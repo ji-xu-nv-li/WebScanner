@@ -1,9 +1,14 @@
 package com.wsbc.selenium.operation;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.wsbc.selenium.result.Result;
 import com.wsbc.selenium.util.SeleniumUtil;
 
 public class ExitOperation extends Operation {
+	
+	private static final Log logger = LogFactory.getLog(ExitOperation.class);
 	
 	public static final String CURRENT = "current";
 	

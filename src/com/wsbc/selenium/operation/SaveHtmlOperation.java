@@ -1,10 +1,15 @@
 package com.wsbc.selenium.operation;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.wsbc.selenium.result.Result;
 import com.wsbc.selenium.util.SeleniumUtil;
 import com.wsbc.util.file.WsbcFileUtil;
 
 public class SaveHtmlOperation extends Operation {
+	
+	private static final Log logger = LogFactory.getLog(SaveHtmlOperation.class);
 	
 	private String localPath;
 

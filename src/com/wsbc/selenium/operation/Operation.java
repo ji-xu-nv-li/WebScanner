@@ -1,13 +1,8 @@
 package com.wsbc.selenium.operation;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.wsbc.selenium.result.Result;
 
 public abstract class Operation{
-	
-	public static final Log logger = LogFactory.getLog(Operation.class);
 	
 	/**
 	 * 方法描述：0-操作成功

@@ -3,6 +3,9 @@ package com.wsbc.selenium.operation.system;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.wsbc.selenium.operation.Operation;
 import com.wsbc.selenium.result.Result;
 
@@ -10,6 +13,8 @@ import com.wsbc.selenium.result.Result;
  * 多个操作和为一组执行
  */
 public class ListOperation extends Operation{
+	
+	private static final Log logger = LogFactory.getLog(ListOperation.class);
 	
 	private List<Operation> operationList = new ArrayList<Operation>();
 	

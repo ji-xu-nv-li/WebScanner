@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.wsbc.selenium.operation.Operation;
 import com.wsbc.selenium.result.Result;
 import com.wsbc.util.SystemInfoUtil;
@@ -12,6 +15,8 @@ import com.wsbc.util.SystemInfoUtil;
  * 关闭进程
  */
 public class KillOperation extends Operation{
+	
+	private static final Log logger = LogFactory.getLog(KillOperation.class);
 	
 	private String name;
 	

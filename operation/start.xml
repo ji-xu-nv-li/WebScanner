@@ -19,11 +19,11 @@
             <data time="1000"></data>
         </operation>
     </forEach>
-    <operation name="获取自选基金数据操作" type="CustomerOperation" next="保存自选基金信息">
+    <!-- out标签说明：key = 获取数据的方法, value = 其他节点引用的变量 -->
+    <!-- <operation name="获取自选基金数据操作" type="CustomerOperation" next="保存自选基金信息">
         <data class="com.wsbc.selenium.ttjj.task.GetCustomizeFundData"></data>
-        <!-- key = 获取数据的方法, value = 其他节点引用的变量 -->
         <out data="customizeFund"></out>
-    </operation>
+    </operation>  -->
 	<!-- html查找元素：
      	desc-描述信息：无实际用途
      	type-查找方式
@@ -33,7 +33,7 @@
 		attribute-获取元素属性值，默认取文本数据
 		mergeData-用于整合循环内数据，外部通过此值获取数据
 	 -->
-	<search name="保存自选基金信息" type="xpath" condition="//tbody[@data-listidx='0']" multiple="false">
+	<search name="获取自选基金数据操作" type="xpath" condition="//tbody[@data-listidx='0']" multiple="false" next="系统输出">
 		<search name="获取tr标签" type="tagName" condition="tr" multiple="true" alias="tr">
 			<!-- 匹配出多个元素，使用forEach循环操作 -->
 			<forEach items="${tr}" var="tr" mergeData="fund">
@@ -49,6 +49,10 @@
 			</forEach>
 		</search>
 	</search>
+	<!-- 系统测试输出 -->
+	<systemOut name="系统输出">
+		<data fund="${获取自选基金数据操作.fund}"></data>
+	</systemOut>
    <!--  <operation name="保存自选基金信息" type="CustomerOperation">
         <data class="com.wsbc.selenium.ttjj.task.SaveCustomizeFundData"></data>
         <data funds="${获取自选基金数据操作.customizeFund}"></data>

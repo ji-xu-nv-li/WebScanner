@@ -16,6 +16,8 @@ public class ProcessConstant {
 		public static final String DATA = "data";
 		
 		public static final String OUT = "out";
+		
+		public static final String SYSTEM_OUT = "systemOut";
 	}
 	
 	public static class Attribute {
@@ -30,6 +32,9 @@ public class ProcessConstant {
 		public static final String START = "start";
 		
 		public static final String NEXT = "next";
+		
+		public static final String ATTRIBUTE = "attribute";
+		
 	}
 	
 	public static class ForEach {
@@ -40,6 +45,9 @@ public class ProcessConstant {
 		public static final String INDEX = "index";
 		
 		public static final String COUNT = "count";
+		
+		public static final String MERGE_DATA = "mergeData";
+		
 	}
 	
 	public static class Search {

@@ -7,7 +7,6 @@ import com.wsbc.process.constant.ProcessConstant;
 import com.wsbc.selenium.operation.Operation;
 import com.wsbc.selenium.operation.factory.OperationFactory;
 import com.wsbc.selenium.result.Result;
-import com.wsbc.util.StringUtil;
 
 public class OperationNode extends Node {
 	
