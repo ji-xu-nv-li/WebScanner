@@ -1,6 +1,7 @@
 package com.wsbc.process;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -11,7 +12,7 @@ public abstract class Node {
 	
 	private Map<String, String> attributes = new HashMap<String, String>();
 	
-	private Map<String, Object> request = new HashMap<String, Object>();
+	private Map<String, Object> request = new LinkedHashMap<String, Object>();
 	
 	private Map<String, Object> response = new HashMap<String, Object>();
 	
@@ -38,6 +39,10 @@ public abstract class Node {
 		request.put(key, value);
 	}
 	
+	public Map<String, Object> getRequest() {
+		return request;
+	}
+	
 	public Object getRequest(String key) {
 		if (key.matches("^\\$\\{.*\\}$")) {
 			key = key.replaceAll("[$|{|}]", "").trim();
@@ -50,8 +55,12 @@ public abstract class Node {
 		return value;
 	}
 	
-	public Map<String, Object> getRequest() {
-		return request;
+	public String getRequestString(String key) {
+		Object value = getRequest(key);
+		if (value == null) {
+			return null;
+		}
+		return value.toString();
 	}
 	
 	public void putResponse(String key, Object value) {

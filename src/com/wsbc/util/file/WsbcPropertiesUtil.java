@@ -1,5 +1,6 @@
 package com.wsbc.util.file;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -23,6 +24,10 @@ public class WsbcPropertiesUtil {
 	 */
 	public static Properties readProperties(String filePath) {
 		Properties properties = new Properties();
+		File file = new File(filePath);
+		if (!file.exists()) {
+			return properties;
+		}
 		InputStream is = null;
 		try {
 			is = WsbcPropertiesUtil.class.getClassLoader().getResourceAsStream(filePath);

@@ -1,6 +1,7 @@
 package com.wsbc.selenium.test;
 
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 import org.apache.commons.logging.Log;
@@ -23,6 +24,7 @@ import com.wsbc.selenium.result.SeletorResult;
 import com.wsbc.selenium.ttjj.task.ShellTTJJ;
 import com.wsbc.selenium.util.SeleniumBaseUtil;
 import com.wsbc.selenium.util.SeleniumUtil;
+import com.wsbc.util.file.WsbcPropertiesUtil;
 
 public class TestSeletor {
 	
@@ -37,6 +39,14 @@ public class TestSeletor {
 		count = 0;
 //		SaveHtmlOperation.operation("E:/wsbcTest" + (count++) + ".txt");
 		String number = "-1";
+		String systemCode = "";
+		String projectPath = "";
+		if (args != null && args.length > 0) {
+			number = "8";
+			systemCode = args[0];
+			Properties properties = WsbcPropertiesUtil.readProperties("app.properties");
+			projectPath = properties.getProperty("project_path") == null ? "" : properties.getProperty("project_path");
+		}
 		while(true) {
 			try {
 				switch (number) {
@@ -64,6 +74,7 @@ public class TestSeletor {
 						// SeleniumUtil.getDriver().close(); // 关闭当前窗口
 						SeleniumUtil.getDriver().quit(); // 关闭所有窗口
 					}
+					SeleniumBaseUtil.killBrower();
 					return;
 				case "2":
 					OpenSiteOperation.operation("http://localhost/");
@@ -121,7 +132,7 @@ public class TestSeletor {
 					break;
 				case "8":
 //					Process process = new Process("operation/ttjj/fund.xml");
-					Process process = new Process("operation/start.xml");
+					Process process = new Process(projectPath + "operation/start.xml");
 					process.handler();
 					break;
 				default:
@@ -131,19 +142,27 @@ public class TestSeletor {
 			} catch (Exception e) {
 				logger.info("执行异常，原因为：", e);
 			}
-			Scanner scanner = new Scanner(System.in);
-			System.out.println("请输入数字（首选8）：");
-			System.out.println("0：退出程序");
-			System.out.println("1：初始操作");
-			System.out.println("2：打开另一个网址");
-			System.out.println("3：查看当前操作系统");
-			System.out.println("4：输入操作指令");
-			System.out.println("5：元素选择器");
-			System.out.println("6：执行添加自选流程");
-			System.out.println("7：获取自选基金数据操作");
-			System.out.println("8：process方式获取自选基金数据操作");
-			number = scanner.next();
+			if (systemCode.isEmpty()) {
+				number = scannerNumber();
+			} else {
+				number = "0";
+			}
 		}
-			
+	}
+	
+	public static String scannerNumber() {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("请输入数字（首选8）：");
+		System.out.println("0：退出程序");
+		System.out.println("1：初始操作");
+		System.out.println("2：打开另一个网址");
+		System.out.println("3：查看当前操作系统");
+		System.out.println("4：输入操作指令");
+		System.out.println("5：元素选择器");
+		System.out.println("6：执行添加自选流程");
+		System.out.println("7：获取自选基金数据操作");
+		System.out.println("8：process方式获取自选基金数据操作");
+		String number = scanner.next();
+		return number;
 	}
 }

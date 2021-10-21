@@ -1,57 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<process name="获取基金数据" start="打开基金网站">
-    <operation name="打开基金网站" type="OpenSiteOperation" next="添加自选基金操作">
+<process name="获取行业资金流" start="打开板块资金流">
+    <operation name="打开板块资金流" type="OpenSiteOperation" next="获取今日行业资金流">
         <data url="http://localhost/"></data>
     </operation>
-    <forEach name="添加自选基金操作" type="ListOperation" start="输入基金代码" next="获取自选基金数据操作"
-        	items="003096,005918,001595" var="seccode">
-        <operation name="输入基金代码" type="InputOperation" next="等待代码输入反应">
-            <data location="#search-input1"></data>
-            <data value="${seccode}"></data>
-        </operation>
-        <operation name="等待代码输入反应" type="WaitOperation" next="确认基金加入">
-            <data time="1000"></data>
-        </operation>
-        <operation name="确认基金加入" type="OnClickOperation" next="等待加入基金反应">
-            <data location="//*[@class='search-submit btn']"></data>
-        </operation>
-        <operation name="等待加入基金反应" type="WaitOperation">
-            <data time="1000"></data>
-        </operation>
-    </forEach>
-    <!-- out标签说明：key = 获取数据的方法, value = 其他节点引用的变量 -->
-    <!-- <operation name="获取自选基金数据操作" type="CustomerOperation" next="保存自选基金信息">
-        <data class="com.wsbc.selenium.ttjj.task.GetCustomizeFundData"></data>
-        <out data="customizeFund"></out>
-    </operation>  -->
-	<!-- html查找元素：
-     	desc-描述信息：无实际用途
-     	type-查找方式
-     	condition-查找条件
-		multiple-是否匹配多个元素，默认匹配第一个符合的元素
-		alias-查找结果默认使用 _search_ 命名结果，可通过alias重命名
-		attribute-获取元素属性值，默认取文本数据
-		mergeData-用于整合循环内数据，外部通过此值获取数据
-	 -->
-	<search name="获取自选基金数据操作" type="xpath" condition="//tbody[@data-listidx='0']" multiple="false" next="系统输出">
-		<search name="获取tr标签" type="tagName" condition="tr" multiple="true" alias="tr">
-			<!-- 匹配出多个元素，使用forEach循环操作 -->
-			<forEach items="${tr}" var="tr" mergeData="fund">
-				<getData desc="日期" name="date" type="xpath" condition="td[5]/p[2]"></getData>
-				<getData desc="基金代码" name="fundCode" type="xpath" condition="td[1]//a[@class='code']"></getData>
-				<getData desc="基金名称" name="fundName" type="xpath" condition="td[1]//p//a" attribute="title"></getData>
-				<getData desc="净值估算" name="estimates" type="xpath" condition="td[3]"></getData>
-				<getData desc="估算涨幅" name="estimatesPercent" type="xpath" condition="td[4]"></getData>
-				<getData desc="单位净值" name="unitValue" type="xpath" condition="td[5]/p[1]"></getData>
-				<getData desc="累计净值" name="netValue" type="xpath" condition="td[6]"></getData>
-				<getData desc="日增长值" name="dayGrowth" type="xpath" condition="td[7]"></getData>
-				<getData desc="日增长率" name="dayGrowthRate" type="xpath" condition="td[8]"></getData>
-			</forEach>
+	<forEach name="获取今日行业资金流" count="2" next="系统输出" mergeData="fundFlow">
+		<search name="获取tbody标签" type="xpath" condition="//div[@id='dataview']//tbody" multiple="false" >
+			<search name="获取tr标签" type="tagName" condition="tr" multiple="true" alias="tr">
+				<!-- 匹配出多个元素，使用forEach循环操作 -->
+				<forEach items="${tr}" var="tr" mergeData="trs">
+					<getData desc="名称" name="name" type="xpath" condition="td[2]/a"></getData>
+					<getData desc="今日涨跌幅" name="priceLimitPercent" type="xpath" condition="td[4]/span"></getData>
+					<getData desc="主力净流入净额" name="mainNetInflow" type="xpath" condition="td[5]/span"></getData>
+					<getData desc="超大单净流入净额" name="largestNetInflow" type="xpath" condition="td[7]/span"></getData>
+					<getData desc="大单净流入净额" name="largeNetInflow" type="xpath" condition="td[9]/span"></getData>
+					<getData desc="中单净流入净额" name="middleNetInflow" type="xpath" condition="td[11]/span"></getData>
+					<getData desc="小单净流入净额" name="smallNetInflow" type="xpath" condition="td[13]/span"></getData>
+					<getData desc="今日主力净流入最大股" name="largestStock" type="xpath" condition="td[15]/a"></getData>
+				</forEach>
+			</search>
 		</search>
-	</search>
+		<operation name="点击下一页" type="OnClickOperation">
+            <data location="//div[@class='pagerbox']/a[last()]"></data>
+        </operation>
+        <operation name="等待下一页反应" type="WaitOperation">
+            <data time="1000"></data>
+        </operation>
+	</forEach>
 	<!-- 系统测试输出 -->
+	<!-- print开头的属性 为要输出的数据
+		filePath：输出的文件路径，未指定则为控制台输出
+	 -->
 	<systemOut name="系统输出">
-		<data fund="${获取自选基金数据操作.fund}"></data>
+		<data print1="${获取今日行业资金流.fundFlow}"></data>
+		<data filePath="D:/yang/ttjj/hangyezijinliu/%D.txt"></data>
 	</systemOut>
    <!--  <operation name="保存自选基金信息" type="CustomerOperation">
         <data class="com.wsbc.selenium.ttjj.task.SaveCustomizeFundData"></data>

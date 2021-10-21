@@ -19,18 +19,20 @@ public class ForEachListNode extends ListNode {
 		String startName = this.getAttribute(ProcessConstant.Attribute.START);
 		String items = this.getAttribute(ProcessConstant.ForEach.ITEMS);
 		List<Object> list = null;
-		if (items.matches("^\\$\\{.*\\}$")) {
-			Object itemsValue = this.getRequest(items);
-			if (itemsValue instanceof List) {
-				list = (List<Object>) itemsValue;
-			} else if (itemsValue instanceof String) {
-				list = Arrays.asList((Object[])itemsValue.toString().split(","));
+		if (items != null) {
+			if (items.matches("^\\$\\{.*\\}$")) {
+				Object itemsValue = this.getRequest(items);
+				if (itemsValue instanceof List) {
+					list = (List<Object>) itemsValue;
+				} else if (itemsValue instanceof String) {
+					list = Arrays.asList((Object[])itemsValue.toString().split(","));
+				} else {
+					list = new ArrayList<Object>();
+					list.add(itemsValue);
+				}
 			} else {
-				list = new ArrayList<Object>();
-				list.add(itemsValue);
+				list = Arrays.asList((Object[])items.toString().split(","));
 			}
-		} else {
-			list = Arrays.asList((Object[])items.toString().split(","));
 		}
 		
 		if (startName == null || "".equals(startName)) {
@@ -50,15 +52,27 @@ public class ForEachListNode extends ListNode {
 		// 循环内节点数据统一收集
 		List<Map<String, Object>> listMergeData = new ArrayList<Map<String, Object>>();
 		String var = this.getAttribute(ProcessConstant.ForEach.VAR);
-		for (int index = 0, count = list.size(); index < count; index++) {
+		// 支持通过次数循环
+		int count = 0;
+		if (list == null) {
+			String c = this.getAttribute(ProcessConstant.ForEach.COUNT);
+			if (c != null && c.matches("^\\d{1,}$")) {
+				count = Integer.valueOf(c);
+			}
+		} else {
+			count = list.size();
+		}
+		for (int index = 0; index < count; index++) {
 			Map<String, Object> responseAll = new HashMap<String, Object>();
 			String nextName = startName;
 			while (nextName != null && !"".equals(nextName)) {
 				Node node = this.getNode(nextName);
-				if (this.getParent() instanceof SearchNode) {
-					node.putRequest(SearchNode.SEARCH_DATA, list.get(index));
+				if (list != null) {
+					if (this.getParent() instanceof SearchNode) {
+						node.putRequest(SearchNode.SEARCH_DATA, list.get(index));
+					}
+					node.putRequest(var, list.get(index));
 				}
-				node.putRequest(var, list.get(index));
 				node.putRequest(ProcessConstant.ForEach.INDEX, index + "");
 				node.putRequest(ProcessConstant.ForEach.COUNT, count + "");
 				node.handler();
@@ -82,16 +96,28 @@ public class ForEachListNode extends ListNode {
 		// 循环内节点数据统一收集
 		List<Map<String, Object>> listMergeData = new ArrayList<Map<String, Object>>();
 		String var = this.getAttribute(ProcessConstant.ForEach.VAR);
-		for (int index = 0, count = list.size(); index < count; index++) {
+		// 支持通过次数循环
+		int count = 0;
+		if (list == null) {
+			String c = this.getAttribute(ProcessConstant.ForEach.COUNT);
+			if (c != null && c.matches("^\\d{1,}$")) {
+				count = Integer.valueOf(c);
+			}
+		} else {
+			count = list.size();
+		}
+		for (int index = 0; index < count; index++) {
 			Map<String, Object> responseAll = new HashMap<String, Object>();
 			// 顺序遍历节点内容
 			LinkedHashMap<String,Node> nodes = this.getNodes();
 			for (Entry<String, Node> entry : nodes.entrySet()) {
 				Node node = entry.getValue();
-				if (this.getParent() instanceof SearchNode) {
-					node.putRequest(SearchNode.SEARCH_DATA, list.get(index));
+				if (list != null) {
+					if (this.getParent() instanceof SearchNode) {
+						node.putRequest(SearchNode.SEARCH_DATA, list.get(index));
+					}
+					node.putRequest(var, list.get(index));
 				}
-				node.putRequest(var, list.get(index));
 				node.putRequest(ProcessConstant.ForEach.INDEX, index + "");
 				node.putRequest(ProcessConstant.ForEach.COUNT, count + "");
 				node.handler();
@@ -100,6 +126,8 @@ public class ForEachListNode extends ListNode {
 			}
 			listMergeData.add(responseAll);
 		}
-		getResponse().put(mergeData, listMergeData);
+		if (mergeData != null) {
+			getResponse().put(mergeData, listMergeData);
+		}
 	}
 }
